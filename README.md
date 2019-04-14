@@ -60,8 +60,8 @@ collections.getAccountBalance().subscribe(
         @Override
         public void accept(AccountBalance accountBalance) {                 // This function executes in case of success.
             System.out.println(accountBalance.getAvailableBalance());       // 900
-		}
-	}
+        }
+    }
 );
 ```
 You can also consume error events in case of the API request failed.
@@ -87,7 +87,7 @@ collections.createApiUser().subscribe(
 If you use Java 8, you can use lambda functions for more clarity.
 ```java
 collections.getAccountBalance().subscribe(accountBalance -> {     // This function executes in case of success.
-	System.out.println(accountBalance.getAvailableBalance());     // 900
+    System.out.println(accountBalance.getAvailableBalance());     // 900
 });
 ```
 
@@ -220,9 +220,9 @@ String payerMessage = "This is your order 1234"; // Avoid special characters as 
 String payeeNote = "Order 1234";                 // Avoid special characters as it causes Error 500 from the API.
 
 collections.requestToPay(amount, currency, externalId, payerPartyId, payerMessage, payeeNote)
-	.subscribe(referenceId -> {
-		System.out.println(referenceId); // e0c04c5b-e591-46fa-b3f9-92276fdfda4d
-	}
+    .subscribe(referenceId -> {
+        System.out.println(referenceId); // e0c04c5b-e591-46fa-b3f9-92276fdfda4d
+    }
 );
 ```
 
@@ -259,7 +259,7 @@ Documentation: https://momodeveloper.mtn.com/docs/services/collection/operations
 
 ```java
 collections.getAccountStatus("46733123453").subscribe(accountStatus -> {
-	System.out.println(accountStatus.getResult()); // true
+    System.out.println(accountStatus.getResult()); // true
 });
 ```
 
