@@ -75,7 +75,7 @@ This MoMo API client library uses Reactive Programming via [RxJava](https://gith
 
 ```
 collections.createApiUser("www.mycallback.com").subscribe(referenceId -> {
-1   // This section executes in case of success.
+    // This section executes in case of success.
     // You just created a user, so do what you want with the reference ID.
 }, throwable -> {
     // This section executes in case of errors.
