@@ -345,5 +345,86 @@ disbursements.getAccountStatus("46733123453").subscribe(accountStatus -> {
 });
 ```
 
+### 4.6 Remittances
+The Remittance product lets you automatically deposit funds to multiple users in one transaction.
+
+#### 4.6.1 Create a Token
+
+Create a Bearer Token to authenticate your requests.
+
+Documentation: https://momodeveloper.mtn.com/docs/services/remittance/operations/token-POST?
+
+```java
+remittances.createToken().subscribe(
+    token -> { 
+        System.out.println(token.getAccessToken()); // eyJ0eXAiOiJKV1QiLCJhbGciOiJSMjU2In0....
+        System.out.println(token.getExpiresIn());   // 3600
+        System.out.println(token.getTokenType());   // acess_token
+        System.out.println(token.getApiUser());     // 74aebb95-5c4b-465a-83e6-a4cfa83ad2ff
+        System.out.println(token.getApiKey());      // f9f5c67a0b4944f895dfedc719a2753e
+    }
+);
+```
+
+**Please note**: For all requests, you can either create your own token as explained above and pass it to your requests or you can let the client automatically generate it for you.
+
+
+#### 4.6.2 Transfer
+Transfer an amount to a payee account.
+
+Documentation:
+https://momodeveloper.mtn.com/docs/services/remittance/operations/transfer-POST?
+```java
+float amount = 900;
+String currency = "EUR";                         // In Sandbox, this should be EUR.
+String externalId = "201904141150";
+String payeePartyId = "0022505777777";
+String payerMessage = "This is your order 1234"; // Avoid special characters as it causes Error 500 from the API.
+String payeeNote = "Order 1234";                 // Avoid special characters as it causes Error 500 from the API.
+
+remittances.transfer(amount, currency, externalId, payeePartyId, payerMessage, payeeNote)
+    .subscribe(referenceId -> {
+        System.out.println(referenceId); // e0c04c5b-e591-46fa-b3f9-92276fdfda4d
+    }
+);
+```
+
+#### 4.6.3 Get a status of a transfer
+Get the status of a transfer.
+
+Documentation: https://momodeveloper.mtn.com/docs/services/remittance/operations/transfer-referenceId-GET?
+
+```java
+remittances.getTransfer(referenceId).subscribe(
+    transfer -> {
+        System.out.println(transfer.getFinancialTransactionId());	// 521734614
+        System.out.println(transfer.getStatus());                   // SUCCESSFUL
+    }
+);
+```
+
+#### 4.6.4 Get the balance of the account.
+Get the balance of the account.
+
+Documentation: https://momodeveloper.mtn.com/docs/services/remittance/operations/get-v1_0-account-balance?
+
+```java
+remittances.getAccountBalance().subscribe(accountBalance -> {
+    System.out.println(accountBalance.getAvailableBalance());   // 900
+    System.out.println(accountBalance.getCurrency());           // EUR
+});
+```
+
+#### 4.6.5 Get the status of an account holder
+Check if an account holder is registered and active in the system.
+
+Documentation: https://momodeveloper.mtn.com/docs/services/remittance/operations/get-v1_0-accountholder-accountholderidtype-accountholderid-active?
+
+```java
+remittances.getAccountStatus("46733123453").subscribe(accountStatus -> {
+    System.out.println(accountStatus.getResult()); // true
+});
+```
+
 
 
