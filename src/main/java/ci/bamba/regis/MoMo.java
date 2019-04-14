@@ -19,6 +19,10 @@ public class MoMo {
         return new Collections(getBaseUrl(), getEnvironment(), subscriptionKey, apiUser, apiKey);
     }
 
+    public Disbursements createDisbursements(String subscriptionKey, String apiUser, String apiKey) {
+        return new Disbursements(getBaseUrl(), getEnvironment(), subscriptionKey, apiUser, apiKey);
+    }
+
     public Environment getEnvironment() {
         return this.environment;
     }

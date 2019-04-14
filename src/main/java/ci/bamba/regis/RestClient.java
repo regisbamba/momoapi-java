@@ -11,6 +11,8 @@ import ci.bamba.regis.models.AccountStatus;
 import ci.bamba.regis.models.ApiKey;
 import ci.bamba.regis.models.ApiUser;
 import ci.bamba.regis.models.CollectionsRequestToPay;
+import ci.bamba.regis.models.DisbursementsTransfer;
+import ci.bamba.regis.models.DisbursementsTransferBodyRequest;
 import ci.bamba.regis.models.Token;
 import io.reactivex.Observable;
 import ci.bamba.regis.models.CollectionsRequestToPayBodyRequest;
@@ -101,8 +103,26 @@ class RestClient {
                 @Body CollectionsRequestToPayBodyRequest body
         );
 
+        @POST("disbursement/v1_0/transfer")
+        Observable<Response<Void>> disbursementsCreateTransfer(
+                @Header("Authorization") String authorization,
+                @Header("Ocp-Apim-Subscription-Key") String subscriptionKey,
+                @Header("X-Reference-Id") String referenceId,
+                @Header("X-Target-Environment") String targetEnvironment,
+                @Body DisbursementsTransferBodyRequest body
+        );
+
         @GET("collection/v1_0/requesttopay/{referenceId}")
         Observable<Response<CollectionsRequestToPay>> collectionsGetRequestToPay(
+                @Header("Authorization") String authorization,
+                @Header("Ocp-Apim-Subscription-Key") String subscriptionKey,
+                @Header("X-Target-Environment") String targetEnvironment,
+                @Path("referenceId") String referenceId
+        );
+
+
+        @GET("disbursement/v1_0/transfer/{referenceId}")
+        Observable<Response<DisbursementsTransfer>> disbursementsGetTransfer(
                 @Header("Authorization") String authorization,
                 @Header("Ocp-Apim-Subscription-Key") String subscriptionKey,
                 @Header("X-Target-Environment") String targetEnvironment,
@@ -116,8 +136,24 @@ class RestClient {
                 @Header("X-Target-Environment") String targetEnvironment
         );
 
+        @GET("disbursement/v1_0/account/balance")
+        Observable<Response<AccountBalance>> disbursementsGetAccountBalance(
+                @Header("Authorization") String authorization,
+                @Header("Ocp-Apim-Subscription-Key") String subscriptionKey,
+                @Header("X-Target-Environment") String targetEnvironment
+        );
+
         @GET("collection/v1_0/accountholder/{accountHolderIdType}/{accountHolderId}/active ")
         Observable<Response<AccountStatus>> collectionsGetAccountStatus(
+                @Header("Authorization") String authorization,
+                @Header("Ocp-Apim-Subscription-Key") String subscriptionKey,
+                @Header("X-Target-Environment") String targetEnvironment,
+                @Path("accountHolderIdType") String accountHolderIdType,
+                @Path("accountHolderId") String accountHolderId
+        );
+
+        @GET("disbursement/v1_0/accountholder/{accountHolderIdType}/{accountHolderId}/active ")
+        Observable<Response<AccountStatus>> disbursementsGetAccountStatus(
                 @Header("Authorization") String authorization,
                 @Header("Ocp-Apim-Subscription-Key") String subscriptionKey,
                 @Header("X-Target-Environment") String targetEnvironment,
