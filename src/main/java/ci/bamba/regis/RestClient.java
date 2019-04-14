@@ -68,8 +68,8 @@ class RestClient {
 
         @POST("v1_0/apiuser")
         Observable<Response<Void>> createApiUser(
-                @Header("X-Reference-Id") String xReferenceId,
                 @Header("Ocp-Apim-Subscription-Key") String subscriptionKey,
+                @Header("X-Reference-Id") String xReferenceId,
                 @Body HashMap<String, String> body
         );
 
@@ -116,7 +116,7 @@ class RestClient {
                 @Header("X-Target-Environment") String targetEnvironment
         );
 
-        @GET("/v1_0/accountholder/{accountHolderIdType}/{accountHolderId}/active ")
+        @GET("collection/v1_0/accountholder/{accountHolderIdType}/{accountHolderId}/active ")
         Observable<Response<AccountStatus>> collectionsGetAccountStatus(
                 @Header("Authorization") String authorization,
                 @Header("Ocp-Apim-Subscription-Key") String subscriptionKey,

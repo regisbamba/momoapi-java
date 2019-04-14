@@ -2,19 +2,30 @@ package ci.bamba.regis.models;
 
 public class ApiCredentials {
 
-    private String apiUser;
-    private String apiKey;
+    private String user;
+    private String key;
 
-    public ApiCredentials(String apiUser, String apiKey) {
-        this.apiUser = apiUser;
-        this.apiKey = apiKey;
+    public ApiCredentials(){
+
     }
 
-    public String getApiUser() {
-        return apiUser;
-    }
-    public String getApiKey() {
-        return apiKey;
+    public ApiCredentials(String user, String key) {
+        this.user = user;
+        this.key = key;
     }
 
+    public String getUser() {
+        return user;
+    }
+    public String getKey() {
+        return key;
+    }
+
+    public void setUser(String user) {
+        this.user = user;
+    }
+
+    public void setKey(String key) {
+        this.key = key;
+    }
 }

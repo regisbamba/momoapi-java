@@ -4,7 +4,7 @@ public class AccountStatus {
 
     private boolean result;
 
-    public boolean isResult() {
+    public boolean getResult() {
         return result;
     }
 

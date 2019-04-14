@@ -11,8 +11,12 @@ public class MoMo {
         this.environment = environment;
     }
 
-    public Collections subscribeToCollections(String subscriptionKey) {
-        return new Collections(getBaseUrl(), getEnvironment(), subscriptionKey);
+    public Provisioning createProvisioning(String subscriptionKey) {
+        return new Provisioning(subscriptionKey, getBaseUrl());
+    }
+
+    public Collections createCollections(String subscriptionKey, String apiUser, String apiKey) {
+        return new Collections(getBaseUrl(), getEnvironment(), subscriptionKey, apiUser, apiKey);
     }
 
     public Environment getEnvironment() {
@@ -22,5 +26,6 @@ public class MoMo {
     private String getBaseUrl() {
         return this.environment == Environment.SANDBOX ? BASE_URL_SANDBOX : BASE_URL_PRODUCTION;
     }
+
 
 }

@@ -4,6 +4,9 @@ public class ApiKey {
 
     private String apiKey;
 
+    public ApiKey() {
+    }
+
     public ApiKey(String apiKey) {
         this.apiKey = apiKey;
     }

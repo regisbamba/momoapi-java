@@ -9,6 +9,10 @@ public class CollectionsRequestToPayBodyRequest {
     private String payerMessage;
     private String payeeNote;
 
+    public CollectionsRequestToPayBodyRequest() {
+
+    }
+
     public CollectionsRequestToPayBodyRequest(String amount, String currency, String externalId, String payerPartyId, String payerMessage, String payeeNote) {
         this.amount = amount;
         this.currency = currency;
@@ -66,11 +70,15 @@ public class CollectionsRequestToPayBodyRequest {
         this.payeeNote = payeeNote;
     }
 
-    private static class Payer {
+    public static class Payer {
         private String partyIdType;
         private String partyId;
 
-        public Payer(String partyId) {
+        public Payer() {
+
+        }
+
+        Payer(String partyId) {
             this.partyId = partyId;
             this.partyIdType = "MSISDN";
         }

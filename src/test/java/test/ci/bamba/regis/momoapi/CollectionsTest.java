@@ -10,8 +10,12 @@ import org.junit.Test;
 import ci.bamba.regis.Collections;
 import ci.bamba.regis.Environment;
 import ci.bamba.regis.MoMo;
+import ci.bamba.regis.Provisioning;
 import ci.bamba.regis.exceptions.RequestException;
+import ci.bamba.regis.models.AccountBalance;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
@@ -34,141 +38,21 @@ public class CollectionsTest extends BaseTest {
     }
 
     @Test
-    public void testNewMoMo() {
-        MoMo momo = new MoMo(Environment.SANDBOX);
-        assertNotNull(momo);
-        assertEquals(Environment.SANDBOX, momo.getEnvironment());
-
-        MoMo momo2 = new MoMo(Environment.PRODUCTION);
-        assertNotNull(momo2);
-        assertEquals(Environment.PRODUCTION, momo2.getEnvironment());
-    }
-
-    @Test
-    public void testCollectionsSubscribeToProduct() {
-        MoMo momo = new MoMo(Environment.SANDBOX);
-        Collections collections = momo.subscribeToCollections(subscriptionKey);
-        assertNotNull(collections);
-        assertEquals(collections.getSubscriptionKey(), subscriptionKey);
-        assertNotNull(collections.getBaseUrl());
-        assertEquals(collections.getEnvironment(), momo.getEnvironment());
-    }
-
-    @Test
-    public void testCollectionsCreateApiUserSuccess() {
-        MoMo momo = new MoMo(Environment.SANDBOX);
-        Collections collections = momo.subscribeToCollections(subscriptionKey);
-        disposable = collections
-                .createApiUser("www.example.com")
-                .subscribe(referenceId -> {
-                    assertNotNull(referenceId);
-                    assertEquals(36, referenceId.length());
-                }, throwable -> {
-                    RequestException e = (RequestException) throwable;
-                    fail(String.format("\nCode: %s\nMessage: %s", e.getCode(), e.getMessage()));
-                });
-    }
-
-    @Test
-    public void testCollectionsGetApiUser() {
-        String host = "www.example.com";
-        MoMo momo = new MoMo(Environment.SANDBOX);
-        Collections collections = momo.subscribeToCollections(subscriptionKey);
-        disposable = collections
-                .createApiUser(host)
-                .flatMap(collections::getApiUser)
-                .subscribe(apiUser -> {
-                    assertNotNull(apiUser);
-                    assertEquals(host, apiUser.getProviderCallbackHost());
-                }, throwable -> {
-                    RequestException e = (RequestException) throwable;
-                    fail(String.format("\nCode: %s\nMessage: %s", e.getCode(), e.getMessage()));
-                });
-    }
-
-    @Test
-    public void testCollectionsCreateApiUserError() {
-        MoMo momo = new MoMo(Environment.SANDBOX);
-        Collections collections = momo.subscribeToCollections("");
-        disposable = collections
-                .createApiUser("www.example.com")
-                .subscribe(Assert::assertNull, throwable -> {
-                    RequestException e = (RequestException) throwable;
-                    assertEquals(401, e.getCode());
-                });
-    }
-
-    @Test
-    public void testCollectionsCreateApiKeySuccess() {
-        MoMo momo = new MoMo(Environment.SANDBOX);
-        Collections collections = momo.subscribeToCollections(subscriptionKey);
-        disposable = collections
-                .createApiUser("www.example.com")
-                .flatMap(referenceId -> {
-                    assertNotNull(referenceId);
-                    return collections.createApiKey(referenceId);
-                }).subscribe(apiCredentials -> {
-                    assertNotNull(apiCredentials);
-                    assertNotEquals(0, apiCredentials.getApiKey().length());
-                });
-    }
-
-    @Test
-    public void testCollectionsCreateApiKeyError() {
-        MoMo momo = new MoMo(Environment.SANDBOX);
-        Collections collections = momo.subscribeToCollections(subscriptionKey);
-        disposable = collections
-                .createApiUser("www.example.com")
-                .flatMap(referenceId -> {
-                    assertNotNull(referenceId);
-                    return collections.createApiKey("err" + referenceId);
-                }).subscribe(Assert::assertNull, throwable -> {
-                    RequestException e = (RequestException) throwable;
-                    assertEquals(400, e.getCode());
-                });
-    }
-
-    @Test
-    public void testCollectionsCreateToken1() {
-        MoMo momo = new MoMo(Environment.SANDBOX);
-        Collections collections = momo.subscribeToCollections(subscriptionKey);
-        disposable = collections.createToken().subscribe(
-                token -> {
-                    assertNotNull(token);
-                    assertNotEquals(0, token.getAccessToken().length());
-                    assertEquals(3600, token.getExpiresIn());
-                    assertEquals("access_token", token.getTokenType());
-                }
-        );
-    }
-
-    @Test
-    public void testCollectionsCreateToken2() {
-        MoMo momo = new MoMo(Environment.SANDBOX);
-        Collections collections = momo.subscribeToCollections(subscriptionKey);
-        disposable = collections.createToken("www.host.com").subscribe(
-                token -> {
-                    assertNotNull(token);
-                    assertNotEquals(0, token.getAccessToken().length());
-                    assertEquals(3600, token.getExpiresIn());
-                    assertEquals("access_token", token.getTokenType());
-                }
-        );
-    }
-
-
-    @Test
     public void testCollectionsCreateTokenSuccess() {
         MoMo momo = new MoMo(Environment.SANDBOX);
-        Collections collections = momo.subscribeToCollections(subscriptionKey);
-        disposable = collections.createApiUser("www.example.com")
-                .flatMap(apiUser -> {
-                    assertNotNull(apiUser);
-                    return collections.createApiKey(apiUser);
-                }).flatMap(apiCredentials -> {
-                    assertNotNull(apiCredentials);
-                    return collections.createToken(apiCredentials.getApiUser(), apiCredentials.getApiKey());
-                }).subscribe(token -> {
+        Provisioning provisioning = momo.createProvisioning(subscriptionKey);
+        disposable = provisioning.createApiUser().flatMap(provisioning::createApiKey)
+                .flatMap(
+                        apiCredentials -> {
+                            Collections collections = momo.createCollections(
+                                    subscriptionKey, apiCredentials.getUser(), apiCredentials.getKey()
+                            );
+                            assertEquals(collections.getApiCredentials().getUser(), apiCredentials.getUser());
+                            assertEquals(collections.getApiCredentials().getKey(), apiCredentials.getKey());
+                            assertNotNull(collections.getBaseUrl());
+                            return collections.createToken();
+                        }
+                ).subscribe(token -> {
                     assertNotNull(token);
                     assertNotEquals(0, token.getAccessToken().length());
                     assertEquals(3600, token.getExpiresIn());
@@ -179,70 +63,118 @@ public class CollectionsTest extends BaseTest {
     @Test
     public void testCollectionsCreateTokenError() {
         MoMo momo = new MoMo(Environment.SANDBOX);
-        Collections collections = momo.subscribeToCollections(subscriptionKey);
-        disposable = collections.createApiUser("www.example.com")
-                .flatMap(apiUser -> {
-                    assertNotNull(apiUser);
-                    return collections.createApiKey(apiUser);
-                }).flatMap(apiCredentials -> {
-                    assertNotNull(apiCredentials);
-                    return collections.createToken("err" + apiCredentials.getApiUser(), apiCredentials.getApiKey());
-                }).subscribe(Assert::assertNull, throwable -> {
-                    RequestException e = (RequestException) throwable;
-                    assertEquals(500, e.getCode());
-                });
+        Provisioning provisioning = momo.createProvisioning(subscriptionKey);
+        disposable = provisioning.createApiUser().flatMap(provisioning::createApiKey)
+                .flatMap(
+                        apiCredentials -> {
+                            Collections collections = momo.createCollections(
+                                    subscriptionKey, "err" + apiCredentials.getUser(), apiCredentials.getKey()
+                            );
+                            return collections.createToken();
+                        }
+                ).subscribe(
+                        Assert::assertNull,
+                        throwable -> {
+                            RequestException e = (RequestException) throwable;
+                            assertEquals(500, e.getCode());
+                        }
+                );
     }
+
 
     @Test
     public void testCollectionsRequestToPaySuccess() {
         MoMo momo = new MoMo(Environment.SANDBOX);
-        Collections collections = momo.subscribeToCollections(subscriptionKey);
-        disposable = collections
-                .createToken()
-                .flatMap(token -> {
-                    assertNotNull(token.getAccessToken());
-                    return collections.requestToPay(token.getAccessToken(), 900, "EUR", "test", "0022506885888", "test", "test");
-                })
-                .subscribe(referenceId -> {
-                    assertNotNull(referenceId);
-                    assertEquals(36, referenceId.length());
-                });
+        Provisioning provisioning = momo.createProvisioning(subscriptionKey);
+        disposable = provisioning.createApiUser().flatMap(provisioning::createApiKey)
+                .flatMap(
+                        apiCredentials -> {
+                            Collections collections = momo.createCollections(
+                                subscriptionKey, apiCredentials.getUser(), apiCredentials.getKey()
+                            );
+                            return collections.requestToPay(900, "EUR", "test", "0022505777777", "test", "test");
+                        }
+                ).subscribe(Assert::assertNotNull);
     }
 
     @Test
-    public void testCollectionsGetRequestToPay1() {
+    public void testCollectionsRequestToPayError() {
         MoMo momo = new MoMo(Environment.SANDBOX);
-        Collections collections = momo.subscribeToCollections(subscriptionKey);
-        disposable = collections.createToken()
-                .flatMap(token -> collections.requestToPay(token.getAccessToken(), 900, "EUR", "test", "0022505777777", "test", "test")
-                        .flatMap(referenceId -> collections.getRequestToPay(token.getAccessToken(), referenceId))
-                ).subscribe(requestToPay -> {
-                    assertNotNull(requestToPay);
-                    assertEquals("900", requestToPay.getAmount());
+        Provisioning provisioning = momo.createProvisioning(subscriptionKey);
+        disposable = provisioning.createApiUser().flatMap(provisioning::createApiKey)
+            .flatMap(
+                apiCredentials -> {
+                    Collections collections = momo.createCollections(
+                        subscriptionKey, apiCredentials.getUser(), apiCredentials.getKey()
+                    );
+                    return collections.requestToPay(900, "USD", "test", "0022505777777", "test", "test");
+                }
+            )
+            .subscribe(
+                referenceId -> fail("request succeeded but should not."),
+                throwable -> {
+                    RequestException e = (RequestException) throwable;
+                    assertNotNull(e);
+                    assertEquals(500, e.getCode());
+                }
+            );
+    }
+
+    @Test
+    public void  testCollectionsGetRequestToPay() {
+        MoMo momo = new MoMo(Environment.SANDBOX);
+        Provisioning provisioning = momo.createProvisioning(subscriptionKey);
+        disposable = provisioning.createApiUser().flatMap(provisioning::createApiKey)
+                .flatMap(
+                        apiCredentials -> {
+                            Collections collections = momo.createCollections(
+                                    subscriptionKey, apiCredentials.getUser(), apiCredentials.getKey()
+                            );
+                            return collections.requestToPay(
+                                    900, "EUR", "test",
+                                    "0022505777777", "test", "test"
+                            ).flatMap(collections::getRequestToPay);
+                        }
+                ).subscribe(collectionsRequestToPay -> {
+                    assertNotNull(collectionsRequestToPay);
+                    assertEquals(900, collectionsRequestToPay.getAmount(), 0);
+                    assertEquals("0022505777777", collectionsRequestToPay.getPayer().getPartyId());
                 });
     }
 
     @Test
     public void testCollectionsGetAccountBalance() {
         MoMo momo = new MoMo(Environment.SANDBOX);
-        Collections collections = momo.subscribeToCollections(subscriptionKey);
-        disposable = collections.createToken()
-                .flatMap(token -> collections.getAccountBalance(token.getAccessToken()))
-                .subscribe(Assert::assertNotNull, throwable -> {
-                    RequestException e = (RequestException) throwable;
-                    assertNotNull(e);
-                });
+        Provisioning provisioning = momo.createProvisioning(subscriptionKey);
+        disposable = provisioning.createApiUser().flatMap(provisioning::createApiKey)
+                .flatMap(
+                        apiCredentials -> {
+                            Collections collections = momo.createCollections(
+                                    subscriptionKey, apiCredentials.getUser(), apiCredentials.getKey()
+                            );
+                            return collections.getAccountBalance();
+                        }
+                ).subscribe(Assert::assertNotNull);
     }
 
     @Test
     public void testCollectionsGetAccountStatus() {
         MoMo momo = new MoMo(Environment.SANDBOX);
-        Collections collections = momo.subscribeToCollections(subscriptionKey);
-        disposable = collections.createToken()
-                .flatMap(token -> collections.getAccountStatus(token.getAccessToken(), "46733123451"))
-                .subscribe(Assert::assertNotNull, throwable -> {
-                    RequestException e = (RequestException) throwable;
-                    assertNotNull(e);
-                });
+        Provisioning provisioning = momo.createProvisioning(subscriptionKey);
+        disposable = provisioning.createApiUser().flatMap(provisioning::createApiKey)
+                .flatMap(
+                        apiCredentials -> {
+                            Collections collections = momo.createCollections(
+                                    subscriptionKey, apiCredentials.getUser(), apiCredentials.getKey()
+                            );
+                            return collections.getAccountStatus("46733123453");
+                        }
+                ).subscribe(
+                    Assert::assertNotNull,
+                    throwable -> {
+                        RequestException e = (RequestException) throwable;
+                        assertNotNull(e);
+                    }
+                );
     }
 }

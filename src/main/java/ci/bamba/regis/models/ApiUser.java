@@ -5,6 +5,10 @@ public class ApiUser {
     private String providerCallbackHost;
     private String targetEnvironment;
 
+    public ApiUser(){
+
+    }
+
     public ApiUser(String providerCallbackHost, String targetEnvironment) {
         this.providerCallbackHost = providerCallbackHost;
         this.targetEnvironment = targetEnvironment;

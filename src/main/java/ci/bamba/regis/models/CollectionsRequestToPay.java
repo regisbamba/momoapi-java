@@ -1,9 +1,9 @@
 package ci.bamba.regis.models;
 
-public class /**/CollectionsRequestToPay {
+public class CollectionsRequestToPay {
 
     private String reason;
-    private String amount;
+    private float amount;
     private String status;
     private String financialTransactionId;
     private String currency;
@@ -13,11 +13,11 @@ public class /**/CollectionsRequestToPay {
     private String payeeNote;
 
 
-    public String getAmount() {
+    public float getAmount() {
         return amount;
     }
 
-    public void setAmount(String amount) {
+    public void setAmount(float amount) {
         this.amount = amount;
     }
 
@@ -103,13 +103,11 @@ public class /**/CollectionsRequestToPay {
         this.reason = reason;
     }
 
-    private static class Payer {
+    public static class Payer {
         private String partyIdType;
         private String partyId;
 
-        public Payer(String partyId) {
-            this.partyId = partyId;
-            this.partyIdType = "MSISDN";
+        public Payer() {
         }
 
         public String getPartyIdType() {
