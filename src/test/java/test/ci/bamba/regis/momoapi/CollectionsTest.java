@@ -12,7 +12,6 @@ import ci.bamba.regis.Environment;
 import ci.bamba.regis.MoMo;
 import ci.bamba.regis.exceptions.RequestException;
 import io.reactivex.disposables.Disposable;
-
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;

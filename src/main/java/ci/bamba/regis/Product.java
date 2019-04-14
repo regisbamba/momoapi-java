@@ -32,6 +32,10 @@ public class Product {
         return this.baseUrl;
     }
 
+    public Observable<String> createApiUser() {
+        return createApiUser("");
+    }
+
     public Observable<String> createApiUser(String providerCallbackHost) {
         String referenceId = UUID.randomUUID().toString();
         HashMap<String, String> body = new HashMap<>();
