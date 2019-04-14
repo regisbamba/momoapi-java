@@ -56,10 +56,10 @@ When you make a request with this library, you can get the results by subscribin
 Eg: Getting the balance for your account.
 ```java
 collections.getAccountBalance().subscribe(
-	new Consumer<AccountBalance>() {
-		@Override
-		public void accept(AccountBalance accountBalance) {               // This function executes in case of success.                                                  
-        	System.out.println(accountBalance.getAvailableBalance());     // 900
+    new Consumer<AccountBalance>() {
+        @Override
+        public void accept(AccountBalance accountBalance) {                 // This function executes in case of success.
+            System.out.println(accountBalance.getAvailableBalance());       // 900
 		}
 	}
 );
@@ -69,16 +69,16 @@ You can also consume error events in case of the API request failed.
 collections.createApiUser().subscribe(
 	new Consumer<AccountBalance>() {
 		@Override
-		public void accept(AccountBalance accountBalance) {               // This function executes in case of success.                                                  
-        	System.out.println(accountBalance.getAvailableBalance());     // 900
+		public void accept(AccountBalance accountBalance) {                 // This function executes in case of success.
+            System.out.println(accountBalance.getAvailableBalance());       // 900
 		}
 	},
     new Consumer<Throwable>() {
         @Override
-        public void accept(Throwable throwable) throws Exception { 		  // This function executes in case of errors.
-            RequestException e = (RequestException) throwable; 			  // Cast the throwable to RequestException to get the HTTP code and message returned by the MoMo API.
-            System.out.println(e.getCode());    					      // 401
-            System.out.println(e.getMessage()); 						  // Access denied due to invalid subscription key. Make sure to provide a valid key for an active subscription.
+        public void accept(Throwable throwable) throws Exception {          // This function executes in case of errors.
+            RequestException e = (RequestException) throwable;              // Cast the throwable to RequestException to get the HTTP code and message returned by the MoMo API.
+            System.out.println(e.getCode());                                // 401
+            System.out.println(e.getMessage());                             // Access denied due to invalid subscription key. Make sure to provide a valid key for an active subscription.
         }
     }
 );
@@ -93,13 +93,13 @@ collections.getAccountBalance().subscribe(accountBalance -> {     // This functi
 
 ```java
 collections.getAccountBalance().subscribe(
-	accountBalance -> {     										  // This function executes in case of success.
-		System.out.println(accountBalance.getAvailableBalance());     // 900
+	accountBalance -> {                                                 // This function executes in case of success.
+		System.out.println(accountBalance.getAvailableBalance());       // 900
 	},
-    throwable -> { 													  // This function executes in case of error.
-         RequestException e = (RequestException) throwable; 		  // Cast the throwable to RequestException to get the HTTP code and message returned by the MoMo API.
-         System.out.println(e.getCode());    						  // 401
-         System.out.println(e.getMessage()); 					      // Access denied due to invalid subscription key. Make sure to provide a valid key for an active subscription.
+    throwable -> {                                                      // This function executes in case of error.
+         RequestException e = (RequestException) throwable;             // Cast the throwable to RequestException to get the HTTP code and message returned by the MoMo API.
+         System.out.println(e.getCode());                               // 401
+         System.out.println(e.getMessage());                            // Access denied due to invalid subscription key. Make sure to provide a valid key for an active subscription.
     }
 );
 ```
@@ -247,8 +247,8 @@ Documentation: https://momodeveloper.mtn.com/docs/services/collection/operations
 
 ```java
 collections.getAccountBalance().subscribe(accountBalance -> {
-	System.out.println(accountBalance.getAvailableBalance()); // 900
-	System.out.println(accountBalance.getCurrency());		  // EUR
+	System.out.println(accountBalance.getAvailableBalance());   // 900
+	System.out.println(accountBalance.getCurrency());           // EUR
 });
 ```
 
