@@ -65,24 +65,73 @@ MoMo momo = new MoMo(Environment.SANDBOX);
 Collections collections = momo.subscribeToCollections(subscriptionKey);
 ```
 
-The **collections** instance above wiill allow you to do all operations available through the Collections product of the MoMo API.
+The **collections** instance above will allow you to do all operations available through the Collections product of the MoMo API.
 
 Example : Create an API user for collections.
 ```
-collections.createApiUser("www.mycallback.com");
+collections.createApiUser();
 ```
 This MoMo API client library uses Reactive Programming via [RxJava](https://github.com/ReactiveX/RxJava). All API ressources are provided via **Observable** streams.
 
+When you make a request with MoMo client, you can get the results by subscribing to the Observable.
+Eg: Subscribe to get the referenceId when you create a new api user.
 ```
-collections.createApiUser("www.mycallback.com").subscribe(referenceId -> {
-    // This section executes in case of success.
-    // You just created a user, so do what you want with the reference ID.
-}, throwable -> {
-    // This section executes in case of errors.
-    // if you cast the exeception to RequestException, you can get the HTTP code and message returned by the MoMo API.
-    RequestException e = (RequestException) throwable;
-    System.out.println(String.format("\nHTTP Code: %s\nMessage: %s", e.getCode(), e.getMessage())));
-});
+collections.createApiUser().subscribe(
+    new Consumer<String>() {
+        @Override
+        public void accept(String referenceId) { // This section executes in case of success.
+             System.out.println(referenceId);
+            // eg: ea6d052a-8bf4-451e-8fc1-40e7cac6aacc
+        }
+    }
+);
+```
+
+You can also consume error events in case of the API request failed.
+```
+collections.createApiUser().subscribe(
+    new Consumer<String>() {
+        @Override
+        public void accept(String referenceId) {  // This function executes in case of success.         
+            // The referenceId for the apiUser you just created.
+            // eg: ea6d052a-8bf4-451e-8fc1-40e7cac6aacc
+        }
+    },
+    new Consumer<Throwable>() {
+        @Override
+        public void accept(Throwable throwable) throws Exception { // This function executes in case of errors.
+            // if you cast the exception to RequestException, you can get the HTTP code and message returned by the MoMo API.
+            RequestException e = (RequestException) throwable;
+            System.out.println(String.format("\nHTTP Code: %s\nMessage: %s", e.getCode(), e.getMessage()));
+            // HTTP Code: 401
+            // Message : Access denied due to invalid subscription key. Make sure to provide a valid key for an active subscription.
+        }
+    }
+);
+```
+
+If you use Java 8, you can use lambda functions for more clarity.
+```
+collections.createApiUser().subscribe(
+    referenceId -> {
+        System.out.println(referenceId);
+        // ea6d052a-8bf4-451e-8fc1-40e7cac6aacc
+    }
+);
+```
+
+```
+collections.createApiUser().subscribe(
+    referenceId -> { // This section only executes in case of success.
+        System.out.println(referenceId);
+        // ea6d052a-8bf4-451e-8fc1-40e7cac6aacc
+    },
+    throwable -> { // This section only executes in case of error.
+        RequestException e = (RequestException) throwable;
+        System.out.println(String.format("\nHTTP Code: %s\nMessage: %s", e.getCode(), e.getMessage())));
+        // Message : Access denied due to invalid subscription key. Make sure to provide a valid key for an active subscription.
+    }
+);
 ```
 
 TODO : Add more example to README.
