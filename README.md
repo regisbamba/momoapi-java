@@ -66,7 +66,7 @@ collections.getAccountBalance().subscribe(
 ```
 You can also consume error events in case of the API request failed.
 ```java
-collections.createApiUser().subscribe(
+collections.getAccountBalance().subscribe(
     new Consumer<AccountBalance>() {
         @Override
         public void accept(AccountBalance accountBalance) {                 // This function executes in case of success.
