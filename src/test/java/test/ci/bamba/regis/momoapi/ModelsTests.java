@@ -9,6 +9,10 @@ import ci.bamba.regis.models.ApiKey;
 import ci.bamba.regis.models.ApiUser;
 import ci.bamba.regis.models.CollectionsRequestToPay;
 import ci.bamba.regis.models.CollectionsRequestToPayBodyRequest;
+import ci.bamba.regis.models.DisbursementsTransfer;
+import ci.bamba.regis.models.DisbursementsTransferBodyRequest;
+import ci.bamba.regis.models.RemittancesTransfer;
+import ci.bamba.regis.models.RemittancesTransferBodyRequest;
 import ci.bamba.regis.models.Token;
 
 import static org.junit.Assert.assertEquals;
@@ -150,5 +154,144 @@ public class ModelsTests {
         assertEquals(1, token.getExpiresIn());
         assertEquals("access", token.getAccessToken());
         assertEquals("type", token.getTokenType());
+    }
+
+    @Test
+    public void testDisbursementsTransfer() {
+        float amount = 9;
+        String currency = "USD";
+        String externalId = "ext";
+        String financialTransactionId = "fin";
+        String payeeNote = "payee";
+        String payerMessage = "mes";
+        String reason = "reason";
+        String status = "status";
+
+        DisbursementsTransfer.Payee payee = new DisbursementsTransfer.Payee();
+        payee.setPartyId("id");
+        payee.setPartyIdType("type");
+
+        DisbursementsTransfer disbursementsTransfer = new DisbursementsTransfer();
+        disbursementsTransfer.setAmount(amount);
+        disbursementsTransfer.setCurrency(currency);
+        disbursementsTransfer.setExternalId(externalId);
+        disbursementsTransfer.setFinancialTransactionId(financialTransactionId);
+        disbursementsTransfer.setPayeeNote(payeeNote);
+        disbursementsTransfer.setPayerMessage(payerMessage);
+        disbursementsTransfer.setPayee(payee);
+        disbursementsTransfer.setReason(reason);
+        disbursementsTransfer.setStatus(status);
+
+        assertEquals(amount, disbursementsTransfer.getAmount(), 0);
+        assertEquals(currency, disbursementsTransfer.getCurrency());
+        assertEquals(externalId, disbursementsTransfer.getExternalId());
+        assertEquals(financialTransactionId, disbursementsTransfer.getFinancialTransactionId());
+        assertEquals(payeeNote, disbursementsTransfer.getPayeeNote());
+        assertEquals(payerMessage, disbursementsTransfer.getPayerMessage());
+        assertEquals(reason, disbursementsTransfer.getReason());
+        assertEquals(status, disbursementsTransfer.getStatus());
+        assertNotNull(payee);
+        assertEquals("id", disbursementsTransfer.getPayee().getPartyId());
+        assertEquals("type", disbursementsTransfer.getPayee().getPartyIdType());
+    }
+
+    @Test
+    public void testDisbursementsTransferBodyRequest() {
+        String amount = "9";
+        String currency = "USD";
+        String externalId = "ext";
+        String payeeNote = "payee";
+        String payerMessage = "mes";
+
+        DisbursementsTransferBodyRequest.Payee payee = new DisbursementsTransferBodyRequest.Payee();
+        payee.setPartyId("id");
+        payee.setPartyIdType("type");
+
+        DisbursementsTransferBodyRequest disbursementsTransfer = new DisbursementsTransferBodyRequest();
+        disbursementsTransfer.setAmount(amount);
+        disbursementsTransfer.setCurrency(currency);
+        disbursementsTransfer.setExternalId(externalId);
+        disbursementsTransfer.setPayeeNote(payeeNote);
+        disbursementsTransfer.setPayerMessage(payerMessage);
+        disbursementsTransfer.setPayee(payee);
+
+        assertEquals(amount, disbursementsTransfer.getAmount());
+        assertEquals(currency, disbursementsTransfer.getCurrency());
+        assertEquals(externalId, disbursementsTransfer.getExternalId());
+        assertEquals(payeeNote, disbursementsTransfer.getPayeeNote());
+        assertEquals(payerMessage, disbursementsTransfer.getPayerMessage());
+        assertNotNull(payee);
+        assertEquals("id", disbursementsTransfer.getPayee().getPartyId());
+        assertEquals("type", disbursementsTransfer.getPayee().getPartyIdType());
+    }
+
+
+    @Test
+    public void testRemittancesTransfer() {
+        float amount = 9;
+        String currency = "USD";
+        String externalId = "ext";
+        String financialTransactionId = "fin";
+        String payeeNote = "payee";
+        String payerMessage = "mes";
+        String reason = "reason";
+        String status = "status";
+
+        RemittancesTransfer.Payee payee = new RemittancesTransfer.Payee();
+        payee.setPartyId("id");
+        payee.setPartyIdType("type");
+
+        RemittancesTransfer remittancesTransfer = new RemittancesTransfer();
+        remittancesTransfer.setAmount(amount);
+        remittancesTransfer.setCurrency(currency);
+        remittancesTransfer.setExternalId(externalId);
+        remittancesTransfer.setFinancialTransactionId(financialTransactionId);
+        remittancesTransfer.setPayeeNote(payeeNote);
+        remittancesTransfer.setPayerMessage(payerMessage);
+        remittancesTransfer.setPayee(payee);
+        remittancesTransfer.setReason(reason);
+        remittancesTransfer.setStatus(status);
+
+        assertEquals(amount, remittancesTransfer.getAmount(), 0);
+        assertEquals(currency, remittancesTransfer.getCurrency());
+        assertEquals(externalId, remittancesTransfer.getExternalId());
+        assertEquals(financialTransactionId, remittancesTransfer.getFinancialTransactionId());
+        assertEquals(payeeNote, remittancesTransfer.getPayeeNote());
+        assertEquals(payerMessage, remittancesTransfer.getPayerMessage());
+        assertEquals(reason, remittancesTransfer.getReason());
+        assertEquals(status, remittancesTransfer.getStatus());
+        assertNotNull(payee);
+        assertEquals("id", remittancesTransfer.getPayee().getPartyId());
+        assertEquals("type", remittancesTransfer.getPayee().getPartyIdType());
+    }
+
+    @Test
+    public void testRemittancesTransferBodyRequest() {
+        String amount = "9";
+        String currency = "USD";
+        String externalId = "ext";
+        String payeeNote = "payee";
+        String payerMessage = "mes";
+
+        RemittancesTransferBodyRequest.Payee payee = new RemittancesTransferBodyRequest.Payee();
+        payee.setPartyId("id");
+        payee.setPartyIdType("type");
+
+        RemittancesTransferBodyRequest remittancesTransfer = new RemittancesTransferBodyRequest();
+        remittancesTransfer.setAmount(amount);
+        remittancesTransfer.setCurrency(currency);
+        remittancesTransfer.setExternalId(externalId);
+        remittancesTransfer.setPayeeNote(payeeNote);
+        remittancesTransfer.setPayerMessage(payerMessage);
+        remittancesTransfer.setPayee(payee);
+
+        assertEquals(amount, remittancesTransfer.getAmount());
+        assertEquals(currency, remittancesTransfer.getCurrency());
+        assertEquals(externalId, remittancesTransfer.getExternalId());
+        assertEquals(payeeNote, remittancesTransfer.getPayeeNote());
+        assertEquals(payerMessage, remittancesTransfer.getPayerMessage());
+        assertNotNull(payee);
+        assertEquals("id", remittancesTransfer.getPayee().getPartyId());
+        assertEquals("type", remittancesTransfer.getPayee().getPartyIdType());
     }
 }
