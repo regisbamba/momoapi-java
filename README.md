@@ -1,11 +1,10 @@
 # MoMo API Java Client
-[![Build Status](https://travis-ci.org/regisbamba/momoapi-java.svg?branch=master)](https://travis-ci.org/regisbamba/momoapi-java) [![codecov](https://codecov.io/gh/regisbamba/momoapi-java/branch/master/graph/badge.svg)](https://codecov.io/gh/regisbamba/momoapi-java)
+![GitHub](https://img.shields.io/github/license/regisbamba/momoapi-java.svg) [![Release](https://jitpack.io/v/regisbamba/momoapi-java.svg)](https://jitpack.io/#regisbamba/momoapi-java) [![Build Status](https://travis-ci.org/regisbamba/momoapi-java.svg?branch=master)](https://travis-ci.org/regisbamba/momoapi-java) [![codecov](https://codecov.io/gh/regisbamba/momoapi-java/branch/master/graph/badge.svg)](https://codecov.io/gh/regisbamba/momoapi-java)
 
 This is a library that helps you consume the new MTN Mobile Money API ([MoMo API](https://momodeveloper.mtn.com)).
 
 ## 1. Installation
 
-### 1.1 Gradle
 To get started, you first have to add the JitPack repository to your root build.gradle file at the end of repositories section.
 ```
 allprojects {
@@ -19,28 +18,8 @@ allprojects {
 Then, add the dependency to your dependencies section
 ```
 dependencies {
-    implementation 'com.github.regisbamba:momoapi-java:0.0.2'
+    implementation 'com.github.regisbamba:momoapi-java:{latest-version}'
 }
-```
-
-### 1.2 Maven
-First add the JitPack repository.
-```
-<repositories>
-    <repository>
-        <id>jitpack.io</id>
-        <url>https://jitpack.io</url>
-    </repository>
-</repositories>
-```
-
-Then add the dependency 
-```
-<dependency>
-    <groupId>com.github.regisbamba</groupId>
-    <artifactId>momoapi-java</artifactId>
-    <version>0.0.2</version>
-</dependency>
 ```
 
 For other build systems, please see instructions on [Jitpack's website](https://jitpack.io/#regisbamba/momoapi-java/0.0.1).
