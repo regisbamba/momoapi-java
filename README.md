@@ -27,7 +27,7 @@ dependencies {
 }
 ```
 
-For other build systems, please see instructions on [Jitpack's website](https://jitpack.io/#regisbamba/momoapi-java/0.0.1).
+For other build systems, please see instructions on [Jitpack's website](https://jitpack.io/#regisbamba/momoapi-java).
 
 ## 2. Prerequesite
 Before everything else, make sure you open an account on the ([MoMo API](https://momodeveloper.mtn.com)) portal.
