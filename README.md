@@ -1,7 +1,12 @@
 # MoMo API Java Client
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://github.com/regisbamba/momoapi-java/blob/master/License.md) [![Release](https://jitpack.io/v/regisbamba/momoapi-java.svg)](https://jitpack.io/#regisbamba/momoapi-java) [![Build Status](https://travis-ci.org/regisbamba/momoapi-java.svg?branch=master)](https://travis-ci.org/regisbamba/momoapi-java) [![codecov](https://codecov.io/gh/regisbamba/momoapi-java/branch/master/graph/badge.svg)](https://codecov.io/gh/regisbamba/momoapi-java)
 
-This is a library that helps you consume the new MTN Mobile Money API ([MoMo API](https://momodeveloper.mtn.com)).
+This library helps you consume the new MTN Mobile Money API ([MoMo API](https://momodeveloper.mtn.com)).
+
+Features :
+- Support for Collections, Disbursements, Remittances
+- Support for Sandbox User provisioning
+- Automatically generate tokens for your requests, eg: collections.getAccountBalance() // no need to get token
 
 ## 1. Installation
 
@@ -31,7 +36,7 @@ You will need to subscribe to products on the portal before you can use them thr
 ## 3. Consuming resources from the API
 This library uses Reactive Programming via [RxJava](https://github.com/ReactiveX/RxJava). All API resources are provided via **Observable** streams.
 
-When you make a request with this library, you can get the results by subscribing to the Observable and check whether the request was successful or not.
+When you make a request, you can get the results by subscribing to the Observable and check whether the request was successful or not.
 
 Eg: Getting the balance for your account.
 ```java
@@ -93,7 +98,7 @@ MoMo momo = new MoMo(Environment.SANDBOX);
 ```
 
 ### 4.2 Authenticate your requests
-According to [documentation](https://momodeveloper.mtn.com/api-documentation/api-description/), there credentials to be used are :
+According to [documentation](https://momodeveloper.mtn.com/api-documentation/api-description/), the credentials to be used are :
   - Subscription Key
   - API User and API Key to generate a Bearer Token for Oauth 2.0  
 
