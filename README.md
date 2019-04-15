@@ -1,5 +1,5 @@
 # MoMo API Java Client
-![GitHub](https://img.shields.io/github/license/regisbamba/momoapi-java.svg) [![Release](https://jitpack.io/v/regisbamba/momoapi-java.svg)](https://jitpack.io/#regisbamba/momoapi-java) [![Build Status](https://travis-ci.org/regisbamba/momoapi-java.svg?branch=master)](https://travis-ci.org/regisbamba/momoapi-java) [![codecov](https://codecov.io/gh/regisbamba/momoapi-java/branch/master/graph/badge.svg)](https://codecov.io/gh/regisbamba/momoapi-java)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://github.com/regisbamba/momoapi-java/blob/master/License.md) [![Release](https://jitpack.io/v/regisbamba/momoapi-java.svg)](https://jitpack.io/#regisbamba/momoapi-java) [![Build Status](https://travis-ci.org/regisbamba/momoapi-java.svg?branch=master)](https://travis-ci.org/regisbamba/momoapi-java) [![codecov](https://codecov.io/gh/regisbamba/momoapi-java/branch/master/graph/badge.svg)](https://codecov.io/gh/regisbamba/momoapi-java)
 
 This is a library that helps you consume the new MTN Mobile Money API ([MoMo API](https://momodeveloper.mtn.com)).
 
