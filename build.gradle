@@ -1,13 +1,7 @@
-apply plugin: 'java'
-apply plugin: 'jacoco'
-
-version = '0.0.1'
-sourceCompatibility = 1.8
-targetCompatibility = 1.8
-
 plugins {
     // Apply the java-library plugin to add support for Java Library
     id 'java-library'
+    id 'jacoco'
 }
 
 repositories {
@@ -32,6 +26,10 @@ dependencies {
     // Use JUnit test framework
     testImplementation 'junit:junit:4.12'
 }
+
+version = '0.0.1'
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
 
 jacocoTestReport {
     reports {
