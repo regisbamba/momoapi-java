@@ -1,7 +1,5 @@
 package ci.bamba.regis;
 
-import java.util.UUID;
-
 import ci.bamba.regis.exceptions.RequestException;
 import ci.bamba.regis.models.AccountBalance;
 import ci.bamba.regis.models.AccountStatus;
@@ -12,26 +10,29 @@ import io.reactivex.Observable;
 
 public class Remittances extends Product {
 
+    private static final String TYPE = "remittance";
+
     Remittances(String baseUrl, Environment environment, String subscriptionKey, String apiUser, String apiKey) {
         super(baseUrl, environment, subscriptionKey, apiUser, apiKey);
     }
 
     public Observable<Token> createToken() {
-        return super.createToken("remittance");
+        return super.createToken(TYPE);
     }
 
-    public Observable<String> transfer(float amount, String currency, String externalId, String payeePartyId, String payerMessage, String payeeNote) {
-        return createToken().flatMap(token -> transfer(token.getAccessToken(), amount, currency, externalId, payeePartyId, payerMessage, payeeNote));
+    public Observable<String> transfer(float amount, String currency, String externalId, String payeePartyId,
+            String payerMessage, String payeeNote) {
+        return createToken().flatMap(token -> transfer(token.getAccessToken(), amount, currency, externalId,
+                payeePartyId, payerMessage, payeeNote));
     }
 
-    public Observable<String> transfer(String token, float amount, String currency, String externalId, String payeePartyId, String payerMessage, String payeeNote) {
-        RemittancesTransferBodyRequest body = new RemittancesTransferBodyRequest(String.format("%s", amount), currency, externalId, payeePartyId, payerMessage, payeeNote);
-        String authorization = String.format("Bearer %s", token);
-        String referenceId = UUID.randomUUID().toString();
-        return RestClient
-                .getService(getBaseUrl())
-                .remittancesCreateTransfer(authorization, getSubscriptionKey(), referenceId, getEnvironment().getEnv(), body)
-                .map(response -> {
+    public Observable<String> transfer(String token, float amount, String currency, String externalId,
+            String payeePartyId, String payerMessage, String payeeNote) {
+        RemittancesTransferBodyRequest body = new RemittancesTransferBodyRequest(String.format("%s", amount), currency,
+                externalId, payeePartyId, payerMessage, payeeNote);
+        String referenceId = getUUID();
+        return RestClient.getService(getBaseUrl()).remittancesCreateTransfer(getAuthHeader(token), getSubscriptionKey(),
+                referenceId, getEnvironment().getEnv(), body).map(response -> {
                     if (response.code() == 202) {
                         return referenceId;
                     } else {
@@ -45,11 +46,8 @@ public class Remittances extends Product {
     }
 
     public Observable<RemittancesTransfer> getTransfer(String token, String referenceId) {
-        String authorization = String.format("Bearer %s", token);
-        return RestClient
-                .getService(getBaseUrl())
-                .remittancesGetTransfer(authorization, getSubscriptionKey(), getEnvironment().getEnv(), referenceId)
-                .map(response -> {
+        return RestClient.getService(getBaseUrl()).remittancesGetTransfer(getAuthHeader(token), getSubscriptionKey(),
+                getEnvironment().getEnv(), referenceId).map(response -> {
                     if (response.code() == 200) {
                         return response.body();
                     } else {
@@ -63,16 +61,7 @@ public class Remittances extends Product {
     }
 
     public Observable<AccountBalance> getAccountBalance(String token) {
-        String authorization = String.format("Bearer %s", token);
-        return RestClient.getService(getBaseUrl())
-                .remittancesGetAccountBalance(authorization, getSubscriptionKey(), getEnvironment().getEnv())
-                .map(response -> {
-                    if (response.code() == 200) {
-                        return response.body();
-                    } else {
-                        throw new RequestException(response.code(), response.message());
-                    }
-                });
+        return super.getAccountBalance(TYPE, token);
     }
 
     public Observable<AccountStatus> getAccountStatus(String msisdn) {
@@ -80,15 +69,6 @@ public class Remittances extends Product {
     }
 
     public Observable<AccountStatus> getAccountStatus(String token, String msisdn) {
-        String authorization = String.format("Bearer %s", token);
-        return RestClient.getService(getBaseUrl())
-                .remittancesGetAccountStatus(authorization, getSubscriptionKey(), getEnvironment().getEnv(), "msisdn", msisdn)
-                .map(response -> {
-                    if (response.code() == 200) {
-                        return response.body();
-                    } else {
-                        throw new RequestException(response.code(), response.message());
-                    }
-                });
+        return super.getAccountStatus(TYPE, token, msisdn);
     }
 }

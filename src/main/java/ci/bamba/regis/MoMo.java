@@ -3,7 +3,7 @@ package ci.bamba.regis;
 public class MoMo {
 
     private static final String BASE_URL_SANDBOX = "https://ericssonbasicapi2.azure-api.net/";
-    private static final String BASE_URL_PRODUCTION = ""; // TODO : updates url for production
+    private static final String BASE_URL_PRODUCTION = "https://ericssonbasicapi1.azure-api.net";
 
     private Environment environment;
 
@@ -11,8 +11,8 @@ public class MoMo {
         this.environment = environment;
     }
 
-    public Provisioning createProvisioning(String subscriptionKey) {
-        return new Provisioning(subscriptionKey, getBaseUrl());
+    public SandboxProvisioning createSandboxProvisioning(String subscriptionKey) {
+        return new SandboxProvisioning(subscriptionKey, getBaseUrl());
     }
 
     public Collections createCollections(String subscriptionKey, String apiUser, String apiKey) {
@@ -31,7 +31,7 @@ public class MoMo {
         return this.environment;
     }
 
-    private String getBaseUrl() {
+    public String getBaseUrl() {
         return this.environment == Environment.SANDBOX ? BASE_URL_SANDBOX : BASE_URL_PRODUCTION;
     }
 

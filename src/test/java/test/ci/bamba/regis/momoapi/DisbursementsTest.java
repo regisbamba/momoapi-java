@@ -10,7 +10,7 @@ import org.junit.Test;
 import ci.bamba.regis.Disbursements;
 import ci.bamba.regis.Environment;
 import ci.bamba.regis.MoMo;
-import ci.bamba.regis.Provisioning;
+import ci.bamba.regis.SandboxProvisioning;
 import ci.bamba.regis.exceptions.RequestException;
 import io.reactivex.disposables.Disposable;
 
@@ -38,7 +38,7 @@ public class DisbursementsTest extends BaseTest {
     @Test
     public void testDisbursementsCreateTokenSuccess() {
         MoMo momo = new MoMo(Environment.SANDBOX);
-        Provisioning provisioning = momo.createProvisioning(subscriptionKey);
+        SandboxProvisioning provisioning = momo.createSandboxProvisioning(subscriptionKey);
         disposable = provisioning.createApiUser().flatMap(provisioning::createApiKey)
                 .flatMap(
                         apiCredentials -> {
@@ -61,7 +61,7 @@ public class DisbursementsTest extends BaseTest {
     @Test
     public void testDisbursementsCreateTokenError() {
         MoMo momo = new MoMo(Environment.SANDBOX);
-        Provisioning provisioning = momo.createProvisioning(subscriptionKey);
+        SandboxProvisioning provisioning = momo.createSandboxProvisioning(subscriptionKey);
         disposable = provisioning.createApiUser().flatMap(provisioning::createApiKey)
                 .flatMap(
                         apiCredentials -> {
@@ -83,7 +83,7 @@ public class DisbursementsTest extends BaseTest {
     @Test
     public void testDisbursementsTransferSuccess() {
         MoMo momo = new MoMo(Environment.SANDBOX);
-        Provisioning provisioning = momo.createProvisioning(subscriptionKey);
+        SandboxProvisioning provisioning = momo.createSandboxProvisioning(subscriptionKey);
         disposable = provisioning.createApiUser().flatMap(provisioning::createApiKey)
                 .flatMap(
                         apiCredentials -> {
@@ -98,7 +98,7 @@ public class DisbursementsTest extends BaseTest {
     @Test
     public void testDisbursementsTransferError() {
         MoMo momo = new MoMo(Environment.SANDBOX);
-        Provisioning provisioning = momo.createProvisioning(subscriptionKey);
+        SandboxProvisioning provisioning = momo.createSandboxProvisioning(subscriptionKey);
         disposable = provisioning.createApiUser().flatMap(provisioning::createApiKey)
             .flatMap(
                 apiCredentials -> {
@@ -119,9 +119,9 @@ public class DisbursementsTest extends BaseTest {
     }
 
     @Test
-    public void  testDisbursementsGetTransfer() {
+    public void  testDisbursementsGetTransferSuccess() {
         MoMo momo = new MoMo(Environment.SANDBOX);
-        Provisioning provisioning = momo.createProvisioning(subscriptionKey);
+        SandboxProvisioning provisioning = momo.createSandboxProvisioning(subscriptionKey);
         disposable = provisioning.createApiUser().flatMap(provisioning::createApiKey)
                 .flatMap(
                         apiCredentials -> {
@@ -141,9 +141,33 @@ public class DisbursementsTest extends BaseTest {
     }
 
     @Test
+    public void  testDisbursementsGetTransferError() {
+        MoMo momo = new MoMo(Environment.SANDBOX);
+        SandboxProvisioning provisioning = momo.createSandboxProvisioning(subscriptionKey);
+        disposable = provisioning.createApiUser().flatMap(provisioning::createApiKey)
+                .flatMap(
+                        apiCredentials -> {
+                            Disbursements disbursements = momo.createDisbursements(
+                                    subscriptionKey, apiCredentials.getUser(), apiCredentials.getKey()
+                            );
+                            return disbursements.transfer(
+                                    900, "EUR", "test",
+                                    "0022505777777", "test", "test"
+                            ).flatMap(referenceId -> disbursements.getTransfer("err" + referenceId));
+                        }
+                ).subscribe(transfer -> {
+                    fail("should not be here");
+                }, throwable -> {
+                    RequestException e = (RequestException) throwable;
+                    assertNotNull(e);
+                    assertEquals(400, e.getCode());
+                });
+    }
+
+    @Test
     public void testDisbursementsGetAccountBalance() {
         MoMo momo = new MoMo(Environment.SANDBOX);
-        Provisioning provisioning = momo.createProvisioning(subscriptionKey);
+        SandboxProvisioning provisioning = momo.createSandboxProvisioning(subscriptionKey);
         disposable = provisioning.createApiUser().flatMap(provisioning::createApiKey)
                 .flatMap(
                         apiCredentials -> {
@@ -164,7 +188,7 @@ public class DisbursementsTest extends BaseTest {
     @Test
     public void testDisbursementsGetAccountStatus() {
         MoMo momo = new MoMo(Environment.SANDBOX);
-        Provisioning provisioning = momo.createProvisioning(subscriptionKey);
+        SandboxProvisioning provisioning = momo.createSandboxProvisioning(subscriptionKey);
         disposable = provisioning.createApiUser().flatMap(provisioning::createApiKey)
                 .flatMap(
                         apiCredentials -> {

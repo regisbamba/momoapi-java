@@ -18,8 +18,14 @@ import ci.bamba.regis.models.Token;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
+import ci.bamba.regis.RestClient;
+public class UnitTests {
 
-public class ModelsTests {
+    @Test
+    public void testRestClient() {
+        RestClient client = new RestClient();
+        assertNotNull(client);
+    }
 
     @Test
     public void testAccountBalance() {
