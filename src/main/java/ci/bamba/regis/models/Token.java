@@ -17,12 +17,6 @@ public class Token {
 
     }
 
-    public Token(String accessToken, String tokenType, int expiresIn) {
-        this.accessToken = accessToken;
-        this.tokenType = tokenType;
-        this.expiresIn = expiresIn;
-    }
-
     public String getAccessToken() {
         return accessToken;
     }

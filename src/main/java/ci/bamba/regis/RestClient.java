@@ -31,7 +31,7 @@ import retrofit2.http.Header;
 import retrofit2.http.POST;
 import retrofit2.http.Path;
 
-class RestClient {
+public class RestClient {
 
     private static OkHttpClient getClient() {
         HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
@@ -147,29 +147,17 @@ class RestClient {
                 @Path("referenceId") String referenceId
         );
 
-        @GET("collection/v1_0/account/balance")
-        Observable<Response<AccountBalance>> collectionsGetAccountBalance(
+        @GET("{type}/v1_0/account/balance")
+        Observable<Response<AccountBalance>> getAccountBalance(
+                @Path("type") String type,
                 @Header("Authorization") String authorization,
                 @Header("Ocp-Apim-Subscription-Key") String subscriptionKey,
                 @Header("X-Target-Environment") String targetEnvironment
         );
 
-        @GET("disbursement/v1_0/account/balance")
-        Observable<Response<AccountBalance>> disbursementsGetAccountBalance(
-                @Header("Authorization") String authorization,
-                @Header("Ocp-Apim-Subscription-Key") String subscriptionKey,
-                @Header("X-Target-Environment") String targetEnvironment
-        );
-
-        @GET("remittance/v1_0/account/balance")
-        Observable<Response<AccountBalance>> remittancesGetAccountBalance(
-                @Header("Authorization") String authorization,
-                @Header("Ocp-Apim-Subscription-Key") String subscriptionKey,
-                @Header("X-Target-Environment") String targetEnvironment
-        );
-
-        @GET("collection/v1_0/accountholder/{accountHolderIdType}/{accountHolderId}/active ")
-        Observable<Response<AccountStatus>> collectionsGetAccountStatus(
+        @GET("{type}/v1_0/accountholder/{accountHolderIdType}/{accountHolderId}/active ")
+        Observable<Response<AccountStatus>> getAccountStatus(
+                @Path("type") String type,
                 @Header("Authorization") String authorization,
                 @Header("Ocp-Apim-Subscription-Key") String subscriptionKey,
                 @Header("X-Target-Environment") String targetEnvironment,
@@ -177,23 +165,6 @@ class RestClient {
                 @Path("accountHolderId") String accountHolderId
         );
 
-        @GET("disbursement/v1_0/accountholder/{accountHolderIdType}/{accountHolderId}/active ")
-        Observable<Response<AccountStatus>> disbursementsGetAccountStatus(
-                @Header("Authorization") String authorization,
-                @Header("Ocp-Apim-Subscription-Key") String subscriptionKey,
-                @Header("X-Target-Environment") String targetEnvironment,
-                @Path("accountHolderIdType") String accountHolderIdType,
-                @Path("accountHolderId") String accountHolderId
-        );
-
-        @GET("remittance/v1_0/accountholder/{accountHolderIdType}/{accountHolderId}/active ")
-        Observable<Response<AccountStatus>> remittancesGetAccountStatus(
-                @Header("Authorization") String authorization,
-                @Header("Ocp-Apim-Subscription-Key") String subscriptionKey,
-                @Header("X-Target-Environment") String targetEnvironment,
-                @Path("accountHolderIdType") String accountHolderIdType,
-                @Path("accountHolderId") String accountHolderId
-        );
 
     }
 

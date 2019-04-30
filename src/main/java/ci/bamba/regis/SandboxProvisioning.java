@@ -8,13 +8,13 @@ import ci.bamba.regis.models.ApiCredentials;
 import ci.bamba.regis.models.ApiUser;
 import io.reactivex.Observable;
 
-public class Provisioning {
+public class SandboxProvisioning {
 
     private String subscriptionKey;
     private String baseUrl;
     private Environment environment;
 
-    Provisioning(String subscriptionKey, String baseUrl) {
+    SandboxProvisioning(String subscriptionKey, String baseUrl) {
         this.subscriptionKey = subscriptionKey;
         this.baseUrl = baseUrl;
         this.environment = Environment.SANDBOX;
@@ -70,11 +70,7 @@ public class Provisioning {
                 .createApiKey(getSubscriptionKey(), referenceId)
                 .map(response -> {
                     if (response.code() == 201) {
-                        if (response.body() != null) {
-                            return new ApiCredentials(referenceId, response.body().getApiKey());
-                        } else {
-                            throw new RequestException(response.code(), response.message());
-                        }
+                        return new ApiCredentials(referenceId, response.body().getApiKey());
                     } else {
                         throw new RequestException(response.code(), response.message());
                     }

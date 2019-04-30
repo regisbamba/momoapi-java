@@ -6,6 +6,7 @@ import ci.bamba.regis.Environment;
 import ci.bamba.regis.MoMo;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 
 public class MoMoTest {
@@ -19,6 +20,7 @@ public class MoMoTest {
         MoMo momo2 = new MoMo(Environment.PRODUCTION);
         assertNotNull(momo2);
         assertEquals(Environment.PRODUCTION, momo2.getEnvironment());
+        assertNotEquals(0, momo2.getBaseUrl().length());
     }
 
 }
