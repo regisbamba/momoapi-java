@@ -1,6 +1,6 @@
 package ci.bamba.regis.models;
 
-public class RemittancesTransferBodyRequest {
+public class TransferBodyRequest {
 
     private String amount;
     private String currency;
@@ -9,11 +9,11 @@ public class RemittancesTransferBodyRequest {
     private String payerMessage;
     private String payeeNote;
 
-    public RemittancesTransferBodyRequest() {
+    public TransferBodyRequest() {
 
     }
 
-    public RemittancesTransferBodyRequest(String amount, String currency, String externalId, String payerPartyId, String payerMessage, String payeeNote) {
+    public TransferBodyRequest(String amount, String currency, String externalId, String payerPartyId, String payerMessage, String payeeNote) {
         this.amount = amount;
         this.currency = currency;
         this.externalId = externalId;

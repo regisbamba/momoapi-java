@@ -1,6 +1,6 @@
 package ci.bamba.regis.models;
 
-public class CollectionsRequestToPayBodyRequest {
+public class RequestToPayBodyRequest {
 
     private String amount;
     private String currency;
@@ -9,11 +9,11 @@ public class CollectionsRequestToPayBodyRequest {
     private String payerMessage;
     private String payeeNote;
 
-    public CollectionsRequestToPayBodyRequest() {
+    public RequestToPayBodyRequest() {
 
     }
 
-    public CollectionsRequestToPayBodyRequest(String amount, String currency, String externalId, String payerPartyId, String payerMessage, String payeeNote) {
+    public RequestToPayBodyRequest(String amount, String currency, String externalId, String payerPartyId, String payerMessage, String payeeNote) {
         this.amount = amount;
         this.currency = currency;
         this.externalId = externalId;

@@ -1,6 +1,6 @@
 package ci.bamba.regis.models;
 
-public class DisbursementsTransfer {
+public class RequestToPay {
 
     private String reason;
     private float amount;
@@ -8,7 +8,7 @@ public class DisbursementsTransfer {
     private String financialTransactionId;
     private String currency;
     private String externalId;
-    private Payee payee;
+    private Payer payer;
     private String payerMessage;
     private String payeeNote;
 
@@ -37,12 +37,12 @@ public class DisbursementsTransfer {
         this.externalId = externalId;
     }
 
-    public Payee getPayee() {
-        return payee;
+    public Payer getPayer() {
+        return payer;
     }
 
-    public void setPayee(Payee payee) {
-        this.payee = payee;
+    public void setPayer(Payer payer) {
+        this.payer = payer;
     }
 
     public String getPayerMessage() {
@@ -103,11 +103,11 @@ public class DisbursementsTransfer {
         this.reason = reason;
     }
 
-    public static class Payee {
+    public static class Payer {
         private String partyIdType;
         private String partyId;
 
-        public Payee() {
+        public Payer() {
         }
 
         public String getPartyIdType() {

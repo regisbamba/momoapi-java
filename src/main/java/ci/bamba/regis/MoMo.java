@@ -3,7 +3,7 @@ package ci.bamba.regis;
 public class MoMo {
 
     private static final String BASE_URL_SANDBOX = "https://ericssonbasicapi2.azure-api.net/";
-    private static final String BASE_URL_PRODUCTION = "https://ericssonbasicapi1.azure-api.net";
+    private static final String BASE_URL_PRODUCTION = "https://ericssonbasicapi1.azure-api.net/";
 
     private Environment environment;
 

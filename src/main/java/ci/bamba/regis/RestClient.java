@@ -1,23 +1,21 @@
 package ci.bamba.regis;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-
 import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import ci.bamba.regis.models.AccountBalance;
 import ci.bamba.regis.models.AccountStatus;
 import ci.bamba.regis.models.ApiKey;
 import ci.bamba.regis.models.ApiUser;
-import ci.bamba.regis.models.CollectionsRequestToPay;
-import ci.bamba.regis.models.DisbursementsTransfer;
-import ci.bamba.regis.models.DisbursementsTransferBodyRequest;
-import ci.bamba.regis.models.RemittancesTransfer;
-import ci.bamba.regis.models.RemittancesTransferBodyRequest;
+import ci.bamba.regis.models.RequestToPay;
+import ci.bamba.regis.models.RequestToPayBodyRequest;
 import ci.bamba.regis.models.Token;
+import ci.bamba.regis.models.Transfer;
+import ci.bamba.regis.models.TransferBodyRequest;
 import io.reactivex.Observable;
-import ci.bamba.regis.models.CollectionsRequestToPayBodyRequest;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.logging.HttpLoggingInterceptor;
@@ -96,51 +94,38 @@ public class RestClient {
                 @Path("type") String type
         );
 
-        @POST("collection/v1_0/requesttopay")
-        Observable<Response<Void>> collectionsCreateRequestToPay(
+        @POST("{type}/v1_0/requesttopay")
+        Observable<Response<Void>> createRequestToPay(
+                @Path("type") String type,
                 @Header("Authorization") String authorization,
                 @Header("Ocp-Apim-Subscription-Key") String subscriptionKey,
                 @Header("X-Reference-Id") String referenceId,
                 @Header("X-Target-Environment") String targetEnvironment,
-                @Body CollectionsRequestToPayBodyRequest body
+                @Body RequestToPayBodyRequest body
         );
 
-        @POST("disbursement/v1_0/transfer")
-        Observable<Response<Void>> disbursementsCreateTransfer(
+        @POST("{type}/v1_0/transfer")
+        Observable<Response<Void>> createTransfer(
+                @Path("type") String type,
                 @Header("Authorization") String authorization,
                 @Header("Ocp-Apim-Subscription-Key") String subscriptionKey,
                 @Header("X-Reference-Id") String referenceId,
                 @Header("X-Target-Environment") String targetEnvironment,
-                @Body DisbursementsTransferBodyRequest body
+                @Body TransferBodyRequest body
         );
 
-        @POST("remittance/v1_0/transfer")
-        Observable<Response<Void>> remittancesCreateTransfer(
-                @Header("Authorization") String authorization,
-                @Header("Ocp-Apim-Subscription-Key") String subscriptionKey,
-                @Header("X-Reference-Id") String referenceId,
-                @Header("X-Target-Environment") String targetEnvironment,
-                @Body RemittancesTransferBodyRequest body
-        );
-
-        @GET("collection/v1_0/requesttopay/{referenceId}")
-        Observable<Response<CollectionsRequestToPay>> collectionsGetRequestToPay(
+        @GET("{type}/v1_0/requesttopay/{referenceId}")
+        Observable<Response<RequestToPay>> getRequestToPay(
+                @Path("type") String type,
                 @Header("Authorization") String authorization,
                 @Header("Ocp-Apim-Subscription-Key") String subscriptionKey,
                 @Header("X-Target-Environment") String targetEnvironment,
                 @Path("referenceId") String referenceId
         );
 
-        @GET("disbursement/v1_0/transfer/{referenceId}")
-        Observable<Response<DisbursementsTransfer>> disbursementsGetTransfer(
-                @Header("Authorization") String authorization,
-                @Header("Ocp-Apim-Subscription-Key") String subscriptionKey,
-                @Header("X-Target-Environment") String targetEnvironment,
-                @Path("referenceId") String referenceId
-        );
-
-        @GET("remittance/v1_0/transfer/{referenceId}")
-        Observable<Response<RemittancesTransfer>> remittancesGetTransfer(
+        @GET("{type}/v1_0/transfer/{referenceId}")
+        Observable<Response<Transfer>> getTransfer(
+                @Path("type") String type,
                 @Header("Authorization") String authorization,
                 @Header("Ocp-Apim-Subscription-Key") String subscriptionKey,
                 @Header("X-Target-Environment") String targetEnvironment,

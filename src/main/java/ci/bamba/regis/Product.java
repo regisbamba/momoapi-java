@@ -7,7 +7,11 @@ import ci.bamba.regis.exceptions.RequestException;
 import ci.bamba.regis.models.AccountBalance;
 import ci.bamba.regis.models.AccountStatus;
 import ci.bamba.regis.models.ApiCredentials;
+import ci.bamba.regis.models.RequestToPay;
+import ci.bamba.regis.models.RequestToPayBodyRequest;
 import ci.bamba.regis.models.Token;
+import ci.bamba.regis.models.Transfer;
+import ci.bamba.regis.models.TransferBodyRequest;
 import io.reactivex.Observable;
 
 public class Product {
@@ -63,6 +67,59 @@ public class Product {
 
     protected String getAuthHeader(String token) {
         return String.format("Bearer %s", token);
+    }
+
+    public Observable<String> transfer(String type, String token, float amount, String currency,
+            String externalId, String payeePartyId, String payerMessage, String payeeNote) {
+        TransferBodyRequest body = new TransferBodyRequest(String.format("%s", amount), currency, externalId,
+                payeePartyId, payerMessage, payeeNote);
+        String referenceId = getUUID();
+        return RestClient.getService(getBaseUrl()).createTransfer(type, getAuthHeader(token), getSubscriptionKey(),
+                referenceId, getEnvironment().getEnv(), body).map(response -> {
+                    if (response.code() == 202) {
+                        return referenceId;
+                    } else {
+                        throw new RequestException(response.code(), response.message());
+                    }
+                });
+    }
+
+    public Observable<Transfer> getTransfer(String type, String token, String referenceId) {
+        return RestClient.getService(getBaseUrl())
+                .getTransfer(type, getAuthHeader(token), getSubscriptionKey(), getEnvironment().getEnv(), referenceId)
+                .map(response -> {
+                    if (response.code() == 200) {
+                        return response.body();
+                    } else {
+                        throw new RequestException(response.code(), response.message());
+                    }
+                });
+    }
+
+    public Observable<String> requestToPay(String type, String token, float amount, String currency, String externalId,
+            String payerPartyId, String payerMessage, String payeeNote) {
+        RequestToPayBodyRequest body = new RequestToPayBodyRequest(String.format("%s", amount), currency, externalId,
+                payerPartyId, payerMessage, payeeNote);
+        String referenceId = getUUID();
+        return RestClient.getService(getBaseUrl()).createRequestToPay(type, getAuthHeader(token), getSubscriptionKey(),
+                referenceId, getEnvironment().getEnv(), body).map(response -> {
+                    if (response.code() == 202) {
+                        return referenceId;
+                    } else {
+                        throw new RequestException(response.code(), response.message());
+                    }
+                });
+    }
+
+    public Observable<RequestToPay> getRequestToPay(String type, String token, String referenceId) {
+        return RestClient.getService(getBaseUrl()).getRequestToPay(type, getAuthHeader(token), getSubscriptionKey(),
+                getEnvironment().getEnv(), referenceId).map(response -> {
+                    if (response.code() == 200) {
+                        return response.body();
+                    } else {
+                        throw new RequestException(response.code(), response.message());
+                    }
+                });
     }
 
     protected Observable<AccountBalance> getAccountBalance(String type, String token) {

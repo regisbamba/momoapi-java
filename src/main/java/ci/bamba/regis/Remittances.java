@@ -1,11 +1,9 @@
 package ci.bamba.regis;
 
-import ci.bamba.regis.exceptions.RequestException;
 import ci.bamba.regis.models.AccountBalance;
 import ci.bamba.regis.models.AccountStatus;
-import ci.bamba.regis.models.RemittancesTransfer;
-import ci.bamba.regis.models.RemittancesTransferBodyRequest;
 import ci.bamba.regis.models.Token;
+import ci.bamba.regis.models.Transfer;
 import io.reactivex.Observable;
 
 public class Remittances extends Product {
@@ -28,32 +26,15 @@ public class Remittances extends Product {
 
     public Observable<String> transfer(String token, float amount, String currency, String externalId,
             String payeePartyId, String payerMessage, String payeeNote) {
-        RemittancesTransferBodyRequest body = new RemittancesTransferBodyRequest(String.format("%s", amount), currency,
-                externalId, payeePartyId, payerMessage, payeeNote);
-        String referenceId = getUUID();
-        return RestClient.getService(getBaseUrl()).remittancesCreateTransfer(getAuthHeader(token), getSubscriptionKey(),
-                referenceId, getEnvironment().getEnv(), body).map(response -> {
-                    if (response.code() == 202) {
-                        return referenceId;
-                    } else {
-                        throw new RequestException(response.code(), response.message());
-                    }
-                });
+        return super.transfer(TYPE, token, amount, currency, externalId, payeePartyId, payerMessage, payeeNote);
     }
 
-    public Observable<RemittancesTransfer> getTransfer(String referenceId) {
+    public Observable<Transfer> getTransfer(String referenceId) {
         return createToken().flatMap(token -> getTransfer(token.getAccessToken(), referenceId));
     }
 
-    public Observable<RemittancesTransfer> getTransfer(String token, String referenceId) {
-        return RestClient.getService(getBaseUrl()).remittancesGetTransfer(getAuthHeader(token), getSubscriptionKey(),
-                getEnvironment().getEnv(), referenceId).map(response -> {
-                    if (response.code() == 200) {
-                        return response.body();
-                    } else {
-                        throw new RequestException(response.code(), response.message());
-                    }
-                });
+    public Observable<Transfer> getTransfer(String token, String referenceId) {
+        return super.getTransfer(TYPE, token, referenceId);
     }
 
     public Observable<AccountBalance> getAccountBalance() {
